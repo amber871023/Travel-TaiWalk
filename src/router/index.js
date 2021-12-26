@@ -14,28 +14,41 @@ const routes = [
         component: () => import('../views/Spots.vue')
       },
       {
-        path: 'festival',
-        component: () => import('../views/Festival.vue')
+        path: 'spots/:ID',
+        name: 'spot',
+        component: () => import('../views/SpotDetail.vue')
+      },
+      {
+        path: 'events',
+        component: () => import('../views/Events.vue')
+      },
+      {
+        path: 'events/:ID',
+        name: 'event',
+        component: () => import('../views/EventDetail.vue')
       },
       {
         path: 'taste-food',
         component: () => import('../views/TasteFood.vue')
+      },
+      {
+        path: 'taste-food/:ID',
+        name: 'food',
+        component: () => import('../views/FoodDetail.vue')
       }
     ]
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+// 切換頁面畫面置頂
+router.afterEach((to, from, next) => {
+  // console.log(to, from, next)
+  window.scrollTo(0, 0)
 })
 
 export default router
