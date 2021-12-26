@@ -125,7 +125,7 @@
   </div>
   <div class="row">
     <div class="col-12 col-lg-6 d-flex flex-column mb-3" v-for="activity in activityDataList" :key="activity.id">
-      <router-link to="/events" class=" text-primary">
+      <router-link :to="`/events/${activity.ID}`" class=" text-primary">
       <div class="card d-flex flex-row">
         <div class="imgWrap">
         <div class="imgCard overflow-hidden">
@@ -157,7 +157,7 @@
       <div class="col-6 d-flex justify-content-end align-items-center"> <router-link to="/spots" class=" text-info">查看更多景點></router-link></div>
   </div>
   <div class="row">
-    <SpotCard v-for="spot in newSpotData" :key="spot.id" :spot="spot"/>
+    <MainImgCard v-for="item in newSpotData" :key="item.id" :item="item" routeName="spot"/>
   </div>
 </section>
 <!--一再回訪美食-->
@@ -167,7 +167,7 @@
       <div class="col-6 d-flex justify-content-end align-items-center"> <router-link to="/taste-food" class=" text-info">查看更多美食></router-link></div>
   </div>
   <div class="row">
-    <FoodCard v-for="food in newFoodData" :key="food.id" :food="food"/>
+    <MainImgCard v-for="item in newFoodData" :key="item.id" :item="item" routeName="food"/>
   </div>
 </section>
 </template>
@@ -176,13 +176,11 @@
 // @ is an alias to /src
 import getAuthorizationHeader from '@/utils/authorizationHeader.js'
 import formatDate from '@/utils/formatDate.js'
-import SpotCard from '@/components/SpotCard'
-import FoodCard from '@/components/FoodCard'
+import MainImgCard from '@/components/MainImgCard'
 
 export default {
   components: {
-    SpotCard,
-    FoodCard
+    MainImgCard
   },
   data () {
     return {
@@ -231,7 +229,7 @@ export default {
         })
     },
     getSpots () {
-      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?$select=ID%2CPicture%2CName%2CAddress&$filter=Picture%2FPictureUrl1%20ne%20null&$top=50&$format=JSON`
+      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?$filter=Picture%2FPictureUrl1%20ne%20null&$top=50&$format=JSON`
       this.$http
         .get(url, {
           // eslint-disable-next-line indent
@@ -249,7 +247,7 @@ export default {
         })
     },
     getFood () {
-      const url = `${process.env.VUE_APP_API}/Tourism/Restaurant?$select=Picture%2CName%2CAddress&$filter=Picture%2FPictureUrl1%20ne%20null&$top=50&$format=JSON`
+      const url = `${process.env.VUE_APP_API}/Tourism/Restaurant?$filter=Picture%2FPictureUrl1%20ne%20null&$top=50&$format=JSON`
       this.$http
         .get(url, {
           // eslint-disable-next-line indent
