@@ -1,18 +1,32 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <Navbar />
+  <router-view />
+  <Footer />
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import Navbar from '@/components/Navbar.vue'
+import Footer from '@/components/Footer.vue'
 export default {
-  name: 'Home',
   components: {
-    HelloWorld
+    Navbar,
+    Footer
   }
 }
 </script>
+<style scoped lang="scss">
+@import '../assets/stylesheets/all';
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+.wrapper {
+  min-height: calc(100% - 60px); /*減去footer高度*/
+}
+footer {
+  height: 60px; /*設定footer本身高度*/
+  margin-top: 60px;
+}
+</style>
