@@ -11,6 +11,7 @@ a {
 .bannerImg {
   width: 100%;
   height: 400px;
+  object-fit: cover;
   @include mobile() {
     height: 185px;
   }
