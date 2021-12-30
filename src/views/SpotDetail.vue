@@ -6,7 +6,7 @@
     <li class="breadcrumb-item"><router-link to="/" class="text-primary">首頁</router-link ></li>
     <li class="breadcrumb-item"><router-link to="/spots" class="text-primary">探索景點</router-link></li>
     <li class="breadcrumb-item"><a href="#" class="text-primary">{{spotDetail.city}}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{spotDetail.Name}}
+    <li class="breadcrumb-item active" aria-current="page">{{spotDetail.ScenicSpotName}}
     </li>
   </ol>
 </nav>
@@ -43,7 +43,7 @@
 <!--詳細介紹-->
 <section class="container">
 <div class="row">
-  <div class="col-12"><h3 class="fs-7">{{spotDetail.Name}}</h3></div>
+  <div class="col-12"><h3 class="fs-7">{{spotDetail.ScenicSpotIDName}}</h3></div>
   <div class="col-12 mb-5">
     <div class="fs-3 d-inline-block border border-secondary rounded-pill text-secondary px-3 me-1" v-if="spotDetail.Class1"># {{spotDetail.Class1}}</div>
     <div class="fs-3 d-inline-block border border-secondary rounded-pill text-secondary px-3 me-1" v-if="spotDetail.Class2"># {{spotDetail.Class2}}</div>
@@ -125,19 +125,19 @@
   <div class="row">
       <div class="col-6 fs-7">這些也不能錯過</div>
       <div class="col-6 d-flex justify-content-end align-items-center"><router-link to="/spots" class=" text-info">查看更多景點></router-link></div>
-      <MainImgCard v-for="item in newSpotData" :key="item.id" :item="item" routeName="spot"  @click="getSpot(), getOtherSpots()"/>
+      <SpotCard v-for="item in newSpotData" :key="item.id" :item="item"  @click="getSpot(), getOtherSpots()"/>
   </div>
 </section>
 </template>
 <script>
 // @ is an alias to /src
 import getAuthorizationHeader from '@/utils/authorizationHeader.js'
-import MainImgCard from '@/components/MainImgCard'
+import SpotCard from '@/components/SpotCard'
 import L from 'leaflet'
 
 export default {
   components: {
-    MainImgCard
+    SpotCard
   },
   data () {
     return {
@@ -156,7 +156,7 @@ export default {
   },
   methods: {
     getSpot () {
-      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?%24filter=ID%20eq%20'${this.id}'&%24format=JSON`
+      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?%24filter=ScenicSpotID%20eq%20'${this.id}'&%24format=JSON`
       this.$http
         .get(url, {
           // eslint-disable-next-line indent
@@ -189,7 +189,7 @@ export default {
     },
     getOtherSpots () {
       this.newSpotData = []
-      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?$select=ID%2CPicture%2CName%2CAddress&$filter=Picture%2FPictureUrl1%20ne%20null&$top=20&$format=JSON`
+      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?$filter=Picture%2FPictureUrl1%20ne%20null&$top=20&$format=JSON`
       this.$http
         .get(url, {
           // eslint-disable-next-line indent

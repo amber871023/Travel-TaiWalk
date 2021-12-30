@@ -6,7 +6,7 @@
     <li class="breadcrumb-item"><router-link to="/" class="text-primary">首頁</router-link ></li>
     <li class="breadcrumb-item"><router-link to="/events" class="text-primary">節慶活動</router-link></li>
     <li class="breadcrumb-item"><a href="#" class="text-primary">{{eventDetail.city}}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{eventDetail.Name}}
+    <li class="breadcrumb-item active" aria-current="page">{{eventDetail.ActivityName}}
     </li>
   </ol>
 </nav>
@@ -43,7 +43,7 @@
 <!--詳細介紹-->
 <section class="container">
 <div class="row">
-  <div class="col-12"><h3 class="fs-7">{{eventDetail.Name}}</h3></div>
+  <div class="col-12"><h3 class="fs-7">{{eventDetail.ActivityName}}</h3></div>
   <div class="col-12 mb-5">
     <div class="fs-3 d-inline-block border border-secondary rounded-pill text-secondary px-3 me-1" v-if="eventDetail.Class1"># {{eventDetail.Class1}}</div>
     <div class="fs-3 d-inline-block border border-secondary rounded-pill text-secondary px-3 me-1" v-if="eventDetail.Class2"># {{eventDetail.Class2}}</div>
@@ -129,7 +129,7 @@
   <div class="row">
       <div class="col-6 fs-7">這些也不能錯過</div>
       <div class="col-6 d-flex justify-content-end align-items-center"><router-link to="/events" class=" text-info">查看更多景點></router-link></div>
-      <MainImgCard v-for="item in newEventData" :key="item.id" :item="item" routeName="event" />
+      <EventCard v-for="item in newEventData" :key="item.id" :item="item"/>
   </div>
 </section>
 </template>
@@ -137,12 +137,12 @@
 // @ is an alias to /src
 import getAuthorizationHeader from '@/utils/authorizationHeader.js'
 import formatDate from '@/utils/formatDate.js'
-import MainImgCard from '@/components/MainImgCard'
+import EventCard from '@/components/EventCard'
 import L from 'leaflet'
 
 export default {
   components: {
-    MainImgCard
+    EventCard
   },
   data () {
     return {
@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     getEvent () {
-      const url = `${process.env.VUE_APP_API}/Tourism/Activity?%24filter=ID%20eq%20'${this.id}'&%24format=JSON`
+      const url = `${process.env.VUE_APP_API}/Tourism/Activity?%24filter=ActivityID%20eq%20'${this.id}'&%24format=JSON`
       this.$http
         .get(url, {
           // eslint-disable-next-line indent

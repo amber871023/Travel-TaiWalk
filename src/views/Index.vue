@@ -84,7 +84,7 @@
       <div class="carousel-inner">
         <div class="carousel-item text-center" v-for="(banner,index) in bannerData"
         :key="banner.id" :class="{'active': index == 0}">
-         <router-link :to="`/spots/${banner.ID}`">
+         <router-link :to="`/spots/${banner.ScenicSpotID}`">
           <img
             :src="banner.Picture.PictureUrl1"
             class="d-block bannerImg"
@@ -92,7 +92,7 @@
             :onerror="defaultBannerImg"
           />
           <div class="carousel-caption d-none d-md-block py-0">
-            <h3 class="mb-0">{{banner.Address.slice(0,3)}} | {{banner.Name}}</h3>
+            <h3 class="mb-0">{{banner.Address.slice(0,3)}} | {{banner.ScenicSpotName}}</h3>
           </div>
           </router-link>
         </div>
@@ -125,7 +125,7 @@
   </div>
   <div class="row">
     <div class="col-12 col-lg-6 d-flex flex-column mb-3" v-for="activity in activityDataList" :key="activity.id">
-      <router-link :to="`/events/${activity.ID}`" class=" text-primary">
+      <router-link :to="`/events/${activity.ActivityID}`" class=" text-primary">
       <div class="card d-flex flex-row">
         <div class="imgWrap">
         <div class="imgCard overflow-hidden">
@@ -135,7 +135,7 @@
         <div class="card-body bg-darkLight d-flex flex-column justify-content-between">
           <div class="d-flex flex-column">
             <p class="card-text text-dark mb-1">{{ activity.StartTime + " - " + activity.EndTime }}</p>
-            <h3 class="card-title text-dark fs-4 fw-bold">{{activity.Name}}</h3>
+            <h3 class="card-title text-dark fs-4 fw-bold">{{activity.ActivityName}}</h3>
           </div>
           <div class="d-flex justify-content-between">
             <p class="text-dark d-flex justify-content-center mb-0">
@@ -157,7 +157,7 @@
       <div class="col-6 d-flex justify-content-end align-items-center"> <router-link to="/spots" class=" text-info">查看更多景點></router-link></div>
   </div>
   <div class="row">
-    <MainImgCard v-for="item in newSpotData" :key="item.id" :item="item" routeName="spot"/>
+    <SpotCard v-for="item in newSpotData" :key="item.id" :item="item"/>
   </div>
 </section>
 <!--一再回訪美食-->
@@ -167,7 +167,7 @@
       <div class="col-6 d-flex justify-content-end align-items-center"> <router-link to="/taste-food" class=" text-info">查看更多美食></router-link></div>
   </div>
   <div class="row">
-    <MainImgCard v-for="item in newFoodData" :key="item.id" :item="item" routeName="food"/>
+    <FoodCard v-for="item in newFoodData" :key="item.id" :item="item"/>
   </div>
 </section>
 </template>
@@ -176,11 +176,13 @@
 // @ is an alias to /src
 import getAuthorizationHeader from '@/utils/authorizationHeader.js'
 import formatDate from '@/utils/formatDate.js'
-import MainImgCard from '@/components/MainImgCard'
+import SpotCard from '@/components/SpotCard'
+import FoodCard from '@/components/FoodCard'
 
 export default {
   components: {
-    MainImgCard
+    SpotCard,
+    FoodCard
   },
   data () {
     return {
