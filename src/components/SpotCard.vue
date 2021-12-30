@@ -1,11 +1,11 @@
 <template>
   <div class="col-6 col-lg-3">
-      <router-link :to="{name: routeName, params:{'ID': item.ID} }">
+      <router-link  :to="`/spots/${item.ScenicSpotID}`">
         <div class="overflow-hidden mb-2" style="border-radius:20px;">
           <img :src="item.Picture.PictureUrl1" class="card-img-top" :alt="item.Picture.PictureDescription1" :onerror="defaultImg">
         </div>
         <div class="card-info">
-            <h3 class="card-title fw-bold fs-4 textOver">{{item.Name}}</h3>
+            <h3  class="card-title fw-bold fs-4 textOver">{{item.ScenicSpotName}}</h3>
               <div class="d-flex justify-content-between">
                 <p class="text-dark d-flex justify-content-center mb-0">
                 <span class="material-icons text-light">
@@ -27,10 +27,6 @@ export default {
     item: {
       type: Object,
       default: () => { return {} }
-    },
-    routeName: {
-      type: String,
-      default: null
     }
   },
   methods: {
