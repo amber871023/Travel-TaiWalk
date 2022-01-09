@@ -84,7 +84,7 @@
       <div class="carousel-inner">
         <div class="carousel-item text-center" v-for="(banner,index) in bannerData"
         :key="banner.id" :class="{'active': index == 0}">
-         <router-link :to="`/spots/${banner.ScenicSpotID}`">
+         <router-link :to="`/spots/${banner.ID}`">
           <img
             :src="banner.Picture.PictureUrl1"
             class="d-block bannerImg"
@@ -92,7 +92,7 @@
             :onerror="defaultBannerImg"
           />
           <div class="carousel-caption d-none d-md-block py-0">
-            <h3 class="mb-0">{{banner.Address.slice(0,3)}} | {{banner.ScenicSpotName}}</h3>
+            <h3 class="mb-0">{{banner.Address.slice(0,3)}} | {{banner.Name}}</h3>
           </div>
           </router-link>
         </div>
@@ -118,71 +118,69 @@
     </div>
   </section>
   <!--近期活動-->
-<section class="container mb-6">
-  <div class="row">
-      <div class="col-6 fs-7">近期活動</div>
-      <div class="col-6 d-flex justify-content-end align-items-center"> <router-link to="/events" class=" text-info">查看更多活動 ></router-link></div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-lg-6 d-flex flex-column mb-3" v-for="activity in activityDataList" :key="activity.id">
-      <router-link :to="`/events/${activity.ActivityID}`" class=" text-primary">
-      <div class="card d-flex flex-row">
-        <div class="imgWrap">
-        <div class="imgCard overflow-hidden">
-          <img :src="activity.Picture.PictureUrl1" class="card-img-top" :alt="activity.Picture.PictureDescription1" style="height: 160px; width: 160px;" :onerror="defaultImg">
-        </div>
-        </div>
-        <div class="card-body bg-darkLight d-flex flex-column justify-content-between">
-          <div class="d-flex flex-column">
-            <p class="card-text text-dark mb-1">{{ activity.StartTime + " - " + activity.EndTime }}</p>
-            <h3 class="card-title text-dark fs-4 fw-bold">{{activity.ActivityName}}</h3>
-          </div>
-          <div class="d-flex justify-content-between">
-            <p class="text-dark d-flex justify-content-center mb-0">
-              <span class="material-icons text-light">
-              place
-              </span>  {{activity.Address.slice(0,3)}}</p>
-              詳細介紹 >
-          </div>
-        </div>
-      </div>
-      </router-link>
+  <section class="container mb-6">
+    <div class="row">
+        <div class="col-6 fs-7">近期活動</div>
+        <div class="col-6 d-flex justify-content-end align-items-center"> <router-link to="/events" class=" text-info">查看更多活動 ></router-link></div>
     </div>
-  </div>
-</section>
+    <div class="row">
+      <div class="col-12 col-lg-6 d-flex flex-column mb-3" v-for="activity in activityDataList" :key="activity.id">
+        <router-link :to="`/events/${activity.ActivityID}`" class=" text-primary">
+          <div class="card d-flex flex-row">
+            <div class="imgWrap">
+              <div class="imgCard overflow-hidden">
+                <img :src="activity.Picture.PictureUrl1" class="card-img-top" :alt="activity.Picture.PictureDescription1" style="height: 160px; width: 160px;" :onerror="defaultImg">
+              </div>
+            </div>
+            <div class="card-body bg-darkLight d-flex flex-column justify-content-between">
+              <div class="d-flex flex-column">
+                <p class="card-text text-dark mb-1">{{ activity.StartTime + " - " + activity.EndTime }}</p>
+                <h3 class="card-title text-dark fs-4 fw-bold">{{activity.ActivityName}}</h3>
+              </div>
+              <div class="d-flex justify-content-between">
+                <p class="text-dark d-flex justify-content-center mb-0">
+                  <span class="material-icons text-light">
+                  place
+                  </span>  {{activity.Address.slice(0,3)}}</p>
+                  詳細介紹 >
+              </div>
+            </div>
+          </div>
+        </router-link>
+      </div>
+    </div>
+  </section>
 <!--熱門打卡景點-->
-<section class="container mb-6">
-  <div class="row">
-      <div class="col-6 fs-7">熱門打卡景點</div>
-      <div class="col-6 d-flex justify-content-end align-items-center"> <router-link to="/spots" class=" text-info">查看更多景點></router-link></div>
-  </div>
-  <div class="row">
-    <SpotCard v-for="item in newSpotData" :key="item.id" :item="item"/>
-  </div>
-</section>
+  <section class="container mb-6">
+    <div class="row">
+        <div class="col-6 fs-7">熱門打卡景點</div>
+        <div class="col-6 d-flex justify-content-end align-items-center"> <router-link to="/spots" class=" text-info">查看更多景點></router-link></div>
+    </div>
+    <div class="row">
+      <SpotCard v-for="item in newSpotData" :key="item.id" :item="item"/>
+    </div>
+  </section>
 <!--一再回訪美食-->
-<section class="container">
-  <div class="row">
-      <div class="col-6 fs-7">一再回訪美食</div>
-      <div class="col-6 d-flex justify-content-end align-items-center"> <router-link to="/taste-food" class=" text-info">查看更多美食></router-link></div>
-  </div>
-  <div class="row">
-    <FoodCard v-for="item in newFoodData" :key="item.id" :item="item"/>
-  </div>
-</section>
+  <section class="container">
+    <div class="row">
+        <div class="col-6 fs-7">一再回訪美食</div>
+        <div class="col-6 d-flex justify-content-end align-items-center"> <router-link to="/taste-food" class=" text-info">查看更多美食></router-link></div>
+    </div>
+    <div class="row">
+      <FoodCard v-for="item in newFoodData" :key="item.id" :item="item"/>
+    </div>
+  </section>
 </template>
 
 <script>
 // @ is an alias to /src
 import getAuthorizationHeader from '@/utils/authorizationHeader.js'
 import formatDate from '@/utils/formatDate.js'
-import SpotCard from '@/components/SpotCard'
-import FoodCard from '@/components/FoodCard'
+import MainImgCard from '@/components/MainImgCard'
 
 export default {
   components: {
-    SpotCard,
-    FoodCard
+    MainImgCard
   },
   data () {
     return {

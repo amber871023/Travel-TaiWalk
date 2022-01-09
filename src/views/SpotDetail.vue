@@ -5,7 +5,7 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><router-link to="/" class="text-primary">首頁</router-link ></li>
     <li class="breadcrumb-item"><router-link to="/spots" class="text-primary">探索景點</router-link></li>
-    <li class="breadcrumb-item"><a href="#" class="text-primary">{{spotDetail.city}}</a></li>
+    <li class="breadcrumb-item"><a href="#" class="text-primary">{{spotDetail.City? spotDetail.City : spotDetail.Address?.slice(0,3) }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{spotDetail.ScenicSpotName}}
     </li>
   </ol>
@@ -97,19 +97,19 @@
       <h5 class="fw-bold">周邊資訊：</h5>
       <div class="col-12 d-flex">
         <div class="col-4">
-          <button class="btn d-flex flex-column align-items-center px-7 py-5" style="border: 1.33px solid #E5E5E5;">
+          <button class="btn d-flex flex-column align-items-center px-7 py-5" :class="{ disabled : noNearbySpot }" style="border: 1.33px solid #E5E5E5;" @click="getNearbySpot()">
             <img src="../assets/img/nearby-spot.png" alt="">
             <span class="text-primary">附近景點</span>
           </button>
         </div>
         <div class="col-4">
-          <button class="btn d-flex flex-column align-items-center px-7 py-5" style="border: 1.33px solid #E5E5E5;">
+          <button class="btn d-flex flex-column align-items-center px-7 py-5" :class="{ disabled : noNearbyEvent }" style="border: 1.33px solid #E5E5E5;" @click="getNearbyEvent()">
             <img src="../assets/img/nearby-event.png" alt="">
             <span class="text-primary">附近活動</span>
           </button>
         </div>
         <div class="col-4">
-          <button class="btn d-flex flex-column align-items-center px-7 py-5" style="border: 1.33px solid #E5E5E5;">
+          <button class="btn d-flex flex-column align-items-center px-7 py-5" :class="{ disabled : noNearbyFood }" style="border: 1.33px solid #E5E5E5;" @click="getNearbyFood()">
             <img src="../assets/img/nearby-food.png" alt="">
             <span class="text-primary">附近美食</span>
           </button>
@@ -145,18 +145,22 @@ export default {
       spotDetail: {
         city: ''
       },
-      defaultImg: 'this.src="' + require('../assets/img/onerror-1100x400.png') + '"',
-      otherSpotDataList: [],
-      newSpotData: [],
       position: {
         lat: '',
         lon: ''
-      }
+      },
+      defaultImg: 'this.src="' + require('../assets/img/onerror-1100x400.png') + '"',
+      otherSpotDataList: [],
+      newSpotData: [],
+      noNearbySpot: false,
+      noNearbyEvent: false,
+      noNearbyFood: false
     }
   },
   methods: {
     getSpot () {
-      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?%24filter=ScenicSpotID%20eq%20'${this.id}'&%24format=JSON`
+      const id = this.$route.params.ID
+      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?%24filter=contains(ScenicSpotID%2C'${id}')&%24format=JSON`
       this.$http
         .get(url, {
           // eslint-disable-next-line indent
@@ -164,7 +168,6 @@ export default {
         })
         .then((res) => {
           this.spotDetail = res.data[0]
-          this.spotDetail.city = this.spotDetail.City ? this.spotDetail.City : this.spotDetail.Address.substr(0, 3)
           this.position.lat = this.spotDetail.Position.PositionLat
           this.position.lon = this.spotDetail.Position.PositionLon
           this.getMap()
@@ -187,6 +190,76 @@ export default {
       }).addTo(myMap)
       L.marker([this.position.lat, this.position.lon]).addTo(myMap)
     },
+    getNearbySpot () {
+      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?%24skip=1&%24filter=Picture%2FPictureUrl1%20ne%20null&%24spatialFilter=nearby(${this.position.lat},${this.position.lon},1000)&%24format=JSON`
+      this.$http
+        .get(url, {
+          // eslint-disable-next-line indent
+          headers: getAuthorizationHeader()
+        })
+        .then((res) => {
+          const nearbySpot = res.data
+          console.log(nearbySpot)
+          this.noNearbySpot = false
+          if (res.data.length === 0) {
+            this.noNearbySpot = true
+            return
+          }
+          // console.log(nearbySpot)
+          if (nearbySpot !== []) {
+            const ID = nearbySpot[Math.floor(Math.random() * nearbySpot.length)].ScenicSpotID
+            this.$router.push(`/spots/${ID}`)
+          }
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+    },
+    getNearbyEvent () {
+      const url = `${process.env.VUE_APP_API}/Tourism/Activity?&%24spatialFilter=nearby(${this.position.lat},${this.position.lon},1000)&%24format=JSON`
+      this.$http
+        .get(url, {
+          // eslint-disable-next-line indent
+          headers: getAuthorizationHeader()
+        })
+        .then((res) => {
+          console.log(res.data)
+          this.noNearbyEvent = false
+          if (res.data.length === 0) {
+            this.noNearbyEvent = true
+            return
+          }
+          if (res.data !== []) {
+            const ID = res.data[Math.floor(Math.random() * res.data.length)].ActivityID
+            this.$router.push(`/events/${ID}`)
+          }
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+    },
+    getNearbyFood () {
+      const url = `${process.env.VUE_APP_API}/Tourism/Restaurant?%24top=5&%24spatialFilter=nearby(${this.position.lat},${this.position.lon},1000)&%24format=JSON`
+      this.$http
+        .get(url, {
+          // eslint-disable-next-line indent
+          headers: getAuthorizationHeader()
+        })
+        .then((res) => {
+          this.noNearbyFood = false
+          if (res.data.length === 0) {
+            this.noNearbyFood = true
+            return
+          }
+          if (res.data !== []) {
+            const ID = res.data[Math.floor(Math.random() * res.data.length)].RestaurantID
+            this.$router.push(`/taste-food/${ID}`)
+          }
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+    },
     getOtherSpots () {
       this.newSpotData = []
       const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?$filter=Picture%2FPictureUrl1%20ne%20null&$top=20&$format=JSON`
@@ -207,18 +280,11 @@ export default {
         })
     }
   },
-  watch: {
-    $route (to) {
-      if (this.spotDetail.ID === to.params.ID || to.params.ID === undefined) {
-        return
-      }
-      this.getSpot()
-    }
-  },
   mounted () {
-    this.id = this.$route.params.ID
-    this.getSpot()
     this.getOtherSpots()
+  },
+  created () {
+    this.getSpot()
   }
 }
 </script>
