@@ -176,11 +176,13 @@
 // @ is an alias to /src
 import getAuthorizationHeader from '@/utils/authorizationHeader.js'
 import formatDate from '@/utils/formatDate.js'
-import MainImgCard from '@/components/MainImgCard'
+import SpotCard from '@/components/SpotCard'
+import FoodCard from '@/components/FoodCard'
 
 export default {
   components: {
-    MainImgCard
+    SpotCard,
+    FoodCard
   },
   data () {
     return {
