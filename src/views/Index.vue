@@ -17,21 +17,22 @@
           </p>
         </div>
         <div class="col-12 col-md-4">
-          <select class="form-select mb-1" aria-label="Default select example">
-            <option selected>探索景點</option>
-            <option value="1">節慶活動</option>
-            <option value="2">品嚐美食</option>
+          <select class="form-select mb-1" v-model="param.category">
+            <option value="ScenicSpot" selected>探索景點</option>
+            <option value="Activity">節慶活動</option>
+            <option value="Restaurant">品嚐美食</option>
           </select>
           <input
             class="form-control mb-1"
             type="text"
             placeholder="你想去哪裡？請輸入關鍵字"
             aria-label="default input example"
+            v-model="param.keyword"
           />
           <button
             type="button"
             class="btn btn-primary w-100 text-white d-flex justify-content-center"
-            @click="searchBtn"
+            @click="search"
           >
             <span class="material-icons text-white pe-3"> search </span>
             搜 尋
@@ -84,7 +85,7 @@
       <div class="carousel-inner">
         <div class="carousel-item text-center" v-for="(banner,index) in bannerData"
         :key="banner.id" :class="{'active': index == 0}">
-         <router-link :to="`/spots/${banner.ID}`">
+         <router-link :to="`/spots/${banner.ScenicSpotID}`">
           <img
             :src="banner.Picture.PictureUrl1"
             class="d-block bannerImg"
@@ -92,7 +93,7 @@
             :onerror="defaultBannerImg"
           />
           <div class="carousel-caption d-none d-md-block py-0">
-            <h3 class="mb-0">{{banner.Address.slice(0,3)}} | {{banner.Name}}</h3>
+            <h3 class="mb-0">{{banner.Address.slice(0,3)}} | {{banner.ScenicSpotName}}</h3>
           </div>
           </router-link>
         </div>
@@ -141,7 +142,7 @@
                 <p class="text-dark d-flex justify-content-center mb-0">
                   <span class="material-icons text-light">
                   place
-                  </span>  {{activity.Address.slice(0,3)}}</p>
+                  </span>  {{activity.City? activity.City : activity.Address?.slice(0,3)}}</p>
                   詳細介紹 >
               </div>
             </div>
@@ -186,6 +187,10 @@ export default {
   },
   data () {
     return {
+      param: {
+        category: 'ScenicSpot',
+        keyword: null
+      },
       bannerData: [],
       defaultBannerImg: 'this.src="' + require('../assets/img/onerror-1100x400.png') + '"',
       activityDataList: [],
@@ -197,6 +202,10 @@ export default {
     }
   },
   methods: {
+    search () {
+      const keyword = this.param.keyword
+      this.$router.push({ name: `${this.category}`, params: { query: keyword } })
+    },
     getBanner () {
       const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?$filter=%20Picture%2FPictureUrl1%20ne%20null&$top=5&$format=JSON`
       this.$http

@@ -13,17 +13,22 @@
 <section class="container mb-8">
   <div class="row flex-row justify-content-center g-1">
     <div class="col-12 col-md-3">
-      <select class="form-select me-3" aria-label="Default select example">
-        <option selected>全部縣市</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+      <select class="form-select me-3">
+        <option value="all" selected>全部縣市</option>
+        <option v-for=" (item,index) in CityList" :key="index" :value="item.City">{{item.CityName}}
+        </option>
       </select>
     </div>
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-3">
+      <select class="form-select me-3">
+        <option value="all" selected>全部分類</option>
+        <option v-for=" (type,index) in types" :key="index" :value="type.name">{{type.name}}</option>
+      </select>
+    </div>
+    <div class="col-12 col-md-4">
       <input class="form-control me-3" type="text" placeholder="你想去哪裡？請輸入關鍵字" aria-label="default input example">
     </div>
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-md-2">
       <button type="button" class="btn btn-primary w-100 text-white d-flex justify-content-center">
         <span class="material-icons text-white pe-3">
         search
@@ -49,9 +54,11 @@
 </section>
 </template>
 <script>
+import getAuthorizationHeader from '@/utils/authorizationHeader.js'
 export default {
   data () {
     return {
+      CityList: [],
       types: [
         {
           name: '地方特產',
@@ -81,8 +88,24 @@ export default {
     }
   },
   methods: {
+    getCity () {
+      const url = 'https://gist.motc.gov.tw/gist_api/V3/Map/Basic/City?$format=JSON'
+      this.$http
+        .get(url, {
+          // eslint-disable-next-line indent
+          headers: getAuthorizationHeader()
+        })
+        .then((res) => {
+          this.CityList = res.data
+          console.log(this.CityList)
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+    }
   },
   mounted () {
+    this.getCity()
   }
 }
 </script>
