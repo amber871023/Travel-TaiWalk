@@ -194,6 +194,7 @@ export default {
       }).addTo(myMap)
       L.marker([this.position.lat, this.position.lon]).addTo(myMap)
     },
+
     getOtherEvents () {
       this.newEventData = []
       const url = `${process.env.VUE_APP_API}/Tourism/Activity?$filter=Picture%2FPictureUrl1%20ne%20null&$top=20&$format=JSON`
