@@ -10,7 +10,7 @@
                 <p class="text-dark d-flex justify-content-center mb-0">
                 <span class="material-icons text-light">
                 place
-                </span> {{item.Address.slice(0,3)}} </p>
+                </span> {{item.City? item.City : item.Address?.slice(0,3)}} </p>
               </div>
         </div>
       </router-link>
