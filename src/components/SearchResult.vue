@@ -12,17 +12,34 @@
     </div>
   </div>
   <div v-else class="row">
-    <SpotCard v-for="(item, index) in list" :key="index" :item="item"/>
+    <SearchCard v-for="(item, index) in list" :key="index" :item="item" :routeName="routeName"/>
   </div>
+  <nav class="d-flex justify-content-center" aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item me-1">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item me-1"><a class="page-link" href="#">1</a></li>
+    <li class="page-item me-1"><a class="page-link" href="#">2</a></li>
+    <li class="page-item me-1"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
 </section>
 </template>
 
 <script>
-import SpotCard from '@/components/SpotCard'
+import SearchCard from '@/components/SearchCard'
 
 export default {
   components: {
-    SpotCard
+    SearchCard
   },
   data () {
     return {
