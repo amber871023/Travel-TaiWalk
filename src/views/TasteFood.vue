@@ -51,7 +51,7 @@
   </div>
 </section>
 <!--搜尋結果-->
-<SearchResult v-else :list="resultList" routeName="food"/>
+<SearchResult v-else :list="resultList" :totalList="totalList" :pages="pages" routeName="food" @filter-list="renderList"/>
 </template>
 <script>
 import getAuthorizationHeader from '@/utils/authorizationHeader.js'
@@ -95,7 +95,13 @@ export default {
         }
       ],
       isSearched: false,
-      resultList: []
+      resultList: [],
+      totalList: [],
+      pages: {
+        pageSize: 20,
+        pageTotal: 0,
+        currentPage: 1
+      }
     }
   },
   methods: {
@@ -127,16 +133,16 @@ export default {
     search () {
       let filterData = ''
       if (this.param.keyword && this.param.type) {
-        filterData = `contains(RestaurantName, '${this.param.keyword}')and contains(Class, '${this.param.type}')`
+        filterData = `%24filter=contains(RestaurantName, '${this.param.keyword}')and contains(Class, '${this.param.type}')`
       } else {
         if (this.param.keyword) {
-          filterData = `contains(RestaurantName, '${this.param.keyword}')`
+          filterData = `%24filter=contains(RestaurantName, '${this.param.keyword}')`
         }
         if (this.param.type) {
-          filterData = `contains(Class, '${this.param.type}')`
+          filterData = `%24filter=contains(Class, '${this.param.type}')`
         }
       }
-      const url = `${process.env.VUE_APP_API}/Tourism/Restaurant/${this.param.city}?%24filter=${filterData}&%24top=30&%24format=JSON`
+      const url = `${process.env.VUE_APP_API}/Tourism/Restaurant/${this.param.city}?${filterData}&%24format=JSON`
       this.$http
         .get(url, {
           // eslint-disable-next-line indent
@@ -148,13 +154,38 @@ export default {
               item.Picture.PictureUrl1 = require('../assets/img/onerror-255x200.png')
             }
           })
-          this.resultList = res.data
+          this.totalList = res.data
+          const dataTotal = this.totalList.length
+          this.pages.pageTotal = Math.ceil(dataTotal / this.pages.pageSize)
+          this.renderList()
           this.isSearched = true
-          console.log(this.resultList)
+          this.param.keyword = null
         })
         .catch(function (err) {
           console.log(err)
         })
+    },
+    renderList (minData = 1, maxData = 20, page = 1) {
+      this.resultList = []
+      this.pages.currentPage = page
+      this.totalList.forEach((item, index) => {
+        const num = index + 1
+        if (num >= minData && num <= maxData) {
+          this.resultList.push(item)
+        }
+      })
+      if (this.pages.currentPage > this.pages.pageTotal) {
+        this.pages.currentPage = this.pageTotal
+      }
+      window.scrollTo(0, 0)
+    }
+  },
+  watch: {
+    $route () {
+      // 相同path 不同 param 時需要 透過watch $route 來重新Render
+      if (this.$route.name === 'spots') {
+        this.search()
+      }
     }
   },
   mounted () {
