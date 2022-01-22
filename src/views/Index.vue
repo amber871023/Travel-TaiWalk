@@ -18,9 +18,9 @@
         </div>
         <div class="col-12 col-md-4">
           <select class="form-select mb-1" v-model="param.category">
-            <option value="ScenicSpot" selected>探索景點</option>
-            <option value="Activity">節慶活動</option>
-            <option value="Restaurant">品嚐美食</option>
+            <option value="spots" selected>探索景點</option>
+            <option value="events">節慶活動</option>
+            <option value="taste-food">品嚐美食</option>
           </select>
           <input
             class="form-control mb-1"
@@ -188,7 +188,7 @@ export default {
   data () {
     return {
       param: {
-        category: 'ScenicSpot',
+        category: 'spots',
         keyword: null
       },
       bannerData: [],
@@ -204,18 +204,20 @@ export default {
   methods: {
     search () {
       const keyword = this.param.keyword
-      this.$router.push({ name: `${this.category}`, params: { query: keyword } })
+      const queryKeyword = { keyword: keyword }
+      this.$router.push({ path: `${this.param.category}`, query: queryKeyword })
     },
     getBanner () {
-      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?$filter=%20Picture%2FPictureUrl1%20ne%20null&$top=5&$format=JSON`
+      const url = `${process.env.VUE_APP_API}/Tourism/ScenicSpot?$filter=%20Picture%2FPictureUrl1%20ne%20null&$top=30&$format=JSON`
       this.$http
         .get(url, {
           // eslint-disable-next-line indent
           headers: getAuthorizationHeader()
         })
         .then((res) => {
-          this.bannerData = res.data
-          // console.log(this.bannerData)
+          for (let i = 0; i <= 4; i++) {
+            this.bannerData.push(res.data[Math.floor(Math.random() * res.data.length)])
+          }
         })
         .catch(function (err) {
           console.log(err)

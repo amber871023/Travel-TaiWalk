@@ -7,10 +7,12 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'Index',
         component: () => import('../views/Index.vue')
       },
       {
         path: 'spots',
+        name: 'spots',
         component: () => import('../views/Spots.vue')
       },
       {
@@ -20,6 +22,7 @@ const routes = [
       },
       {
         path: 'events',
+        name: 'events',
         component: () => import('../views/Events.vue')
       },
       {
@@ -29,6 +32,7 @@ const routes = [
       },
       {
         path: 'taste-food',
+        name: 'taste-food',
         component: () => import('../views/TasteFood.vue')
       },
       {
@@ -37,6 +41,13 @@ const routes = [
         component: () => import('../views/FoodDetail.vue')
       }
     ]
+  },
+  // 重新導向
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: {
+      name: 'Index'
+    }
   }
 ]
 
