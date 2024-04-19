@@ -1,0 +1,13 @@
+// 載入 Bootstrap 套用變數的方法，有這些方法才能正確啟用下面自訂的變數
+// Required
+@import "~bootstrap/scss/functions";
+// 自定義的變數
+@import "./helpers/variables";
+@import "~bootstrap/scss/mixins";
+
+@import "~bootstrap";
+
+@import "./helpers/grid";
+@import "./helpers/pagination";
+@import "./helpers/reboot";
+@import "./pages/home";

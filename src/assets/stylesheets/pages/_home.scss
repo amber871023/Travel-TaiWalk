@@ -1,0 +1,143 @@
+a {
+  color: #2f2f2f; //$link-color;
+  text-decoration: none;
+
+  &:hover {
+    color: $link-hover-color;
+    text-decoration: $link-hover-decoration;
+  }
+}
+
+.form-select{
+  color: $primaryLight;
+  font-weight: 500;
+}
+
+.bannerImg {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  @include mobile() {
+    height: 185px;
+  }
+}
+
+.carousel {
+  position: relative;
+  height: 400px;
+  @include mobile() {
+    height: 185px;
+  }
+}
+.carousel-inner {
+  border-radius: 24px !important;
+}
+
+.carousel-indicators {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: end !important;
+  padding: 0;
+  margin-right: 30px;
+  //margin-left: $carousel-control-width;
+  list-style: none;
+
+  [data-bs-target] {
+    box-sizing: content-box;
+    flex: 0 1 auto;
+    width: 20px !important;
+    height: 20px !important;
+    padding: 0;
+    text-indent: -999px;
+    cursor: pointer;
+    background-color: $carousel-indicator-active-bg;
+    background-clip: padding-box;
+    border-radius: 50%;
+    // Use transparent borders to increase the hit area by 10px on top and bottom.
+    border-top: $carousel-indicator-hit-area-height solid transparent;
+    border-bottom: $carousel-indicator-hit-area-height solid transparent;
+    opacity: $carousel-indicator-opacity;
+    @include transition($carousel-indicator-transition);
+    @include mobile() {
+      width: 10px !important;
+      height: 10px !important;
+    }
+  }
+
+  .active {
+    opacity: $carousel-indicator-active-opacity;
+  }
+}
+
+.carousel-control-prev-icon {
+  background-image: url("../assets/img/Arrow-Left.png");
+}
+.carousel-control-next-icon {
+  background-image: url("../assets/img/Arrow-Right.png");
+}
+
+.carousel-caption {
+  position: absolute;
+  right: (100% - $carousel-caption-width) * 0.5;
+  bottom: 50%;
+  left: (100% - $carousel-caption-width) * 0.5;
+  color: $carousel-caption-color;
+  text-align: center;
+}
+
+
+.titleText {
+  @include mobile() {
+    text-align: center;
+    .smallTitle {
+      display: flex;
+      justify-content: center !important;
+    }
+  }
+}
+
+.textOver {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.textIndent {
+  width: calc(100% - 100px);
+}
+
+.card{
+  border-radius: 20px !important;
+}
+.card-body {
+  // Enable `flex-grow: 1` for decks and groups so that card blocks take up
+  // as much space as possible, ensuring footers are aligned to the bottom.
+  flex: 1 1 auto;
+  padding: $card-spacer-y $card-spacer-x;
+  color: $card-color;
+  border-bottom-right-radius: 20px !important;
+  border-top-right-radius: 20px !important;
+}
+.card-img,
+.card-img-top,
+.card-img-bottom {
+  object-fit: cover;
+  width: 100%;
+  height: 200px;
+  border-top-left-radius: 20px !important;
+  border-bottom-left-radius: 20px !important; // Required because we use flexbox and this inherently applies align-self: stretch
+  @include mobile() {
+    height: 160px;
+  }
+  &:hover {
+    transform: scale(1.1);
+    transition: all 0.5s ease-out 0s;
+  }
+}
+.imgCard{
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
